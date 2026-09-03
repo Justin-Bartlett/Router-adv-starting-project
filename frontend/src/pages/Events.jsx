@@ -1,9 +1,30 @@
-const EventsPage = () => {
+import { useLoaderData } from "react-router-dom"
+
+import EventsList from "../components/EventsList"
+import EventsNavigation from "../components/EventsNavigation"
+
+function EventsPage() {
+  const data = useLoaderData()
+  const events = data.events
+
   return (
     <>
-      <h1>Events</h1>
+      <EventsNavigation />
+      <EventsList events={events} />
     </>
   )
 }
 
 export default EventsPage
+
+export const loader = async () => {
+  const response = await fetch("http://localhost:8080/events")
+
+  if (!response.ok) {
+    throw new Response(JSON.stringify({ message: "Could not fetch events." }), {
+      status: 500,
+    })
+  } else {
+    return response
+  }
+}
