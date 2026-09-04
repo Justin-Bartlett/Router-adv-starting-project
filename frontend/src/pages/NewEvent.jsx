@@ -1,9 +1,39 @@
+import EventForm from "../components/EventForm"
+
 const NewEventPage = () => {
   return (
     <>
-      <h1>New event</h1>
+      <EventForm />
     </>
   )
 }
 
 export default NewEventPage
+
+export const action = async ({ request }) => {
+  const data = await request.formData()
+
+  const eventData = {
+    title: data.get("title"),
+    image: data.get("image"),
+    date: data.get("date"),
+    description: data.get("description"),
+  }
+
+  const response = await fetch("http://localhost:8080/events", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(eventData),
+  })
+
+  if (!response.ok) {
+    throw new Response(
+      JSON.stringify({ message: "Could not save the new event." }),
+      {
+        status: 500,
+      },
+    )
+  }
+}

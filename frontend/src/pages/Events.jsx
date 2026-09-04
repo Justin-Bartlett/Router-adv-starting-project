@@ -9,7 +9,6 @@ function EventsPage() {
 
   return (
     <>
-      <EventsNavigation />
       <EventsList events={events} />
     </>
   )
